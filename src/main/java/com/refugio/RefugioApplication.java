@@ -17,6 +17,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +38,9 @@ public class RefugioApplication implements CommandLineRunner {
     @Autowired
     private AdopcionDAO adopcionDAO;
 
+    @Autowired
+    private ConfigurableApplicationContext context;
+
     public static void main(String[] args) {
         new SpringApplicationBuilder(RefugioApplication.class)
                 .headless(false)
@@ -45,6 +49,10 @@ public class RefugioApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        // Data cleanup as requested
+        empleadoDAO.findByNombre("q").ifPresent(empleado -> empleadoDAO.delete(empleado));
+        empleadoDAO.findByNombre("Dima").ifPresent(empleado -> empleadoDAO.delete(empleado));
+
         // Initialize with some data
         if (empleadoDAO.count() == 0) {
             Empleado empleado = new Empleado("Noe", 33, "Casa Rosada", "1989-06-15", "password");
@@ -67,21 +75,31 @@ public class RefugioApplication implements CommandLineRunner {
                     new EstadoEnObservacion()
             );
 
-            List<Mascota> mascotas = List.of(
+            List<Mascota> mascotas = new java.util.ArrayList<>(List.of(
+                    // Original pets
                     new Kanguro("Saltamontes", "2022-01-01", 200, getRandomEstado(estados)),
                     new Cocodrilo("Bombardiro", "2021-03-14", 100, getRandomEstado(estados)),
                     new Ornitorrinco("Narizon", "2023-05-01", 8, getRandomEstado(estados)),
-                    new Gato("Michi", "2020-10-10", 4.4, getRandomEstado(estados))
-            );
+                    new Gato("Michi", "2020-10-10", 4.4, getRandomEstado(estados)),
+                    // 5 new funny pets (final list)
+                    new Gato("Gato con Botas", "2019-01-15", 5.2, getRandomEstado(estados)),
+                    new Kanguro("Cangri", "2021-11-11", 180, getRandomEstado(estados)),
+                    new Cocodrilo("Dandy", "2018-06-01", 220, getRandomEstado(estados)),
+                    new Ornitorrinco("Phineas", "2022-05-25", 6.8, getRandomEstado(estados)),
+                    new Gato("Garfield", "2020-08-19", 6.1, getRandomEstado(estados))
+            ));
+
             mascotaDAO.saveAll(mascotas);
             logger.info("Mascotas guardadas en base de datos.");
         }
 
 
         // Launch the UI
-        java.awt.EventQueue.invokeLater(() ->
-                new LoginUI(adoptanteDAO, empleadoDAO, mascotaDAO, adopcionDAO).setVisible(true)
-        );
+        java.awt.EventQueue.invokeLater(() -> {
+            LoginUI loginUI = context.getBean(LoginUI.class);
+            loginUI.initUI();
+            loginUI.setVisible(true);
+        });
     }
 
     private EstadoMascota getRandomEstado(List<EstadoMascota> estados) {

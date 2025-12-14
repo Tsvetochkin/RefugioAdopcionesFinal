@@ -1,20 +1,22 @@
 package com.refugio.ui;
 
-import com.refugio.dao.AdopcionDAO;
-import com.refugio.dao.AdoptanteDAO;
 import com.refugio.dao.EmpleadoDAO;
-import com.refugio.dao.MascotaDAO;
 import com.refugio.model.persona.Empleado;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 
+@Component
 public class RegistroUI extends JFrame {
 
-    private final AdoptanteDAO adoptanteDAO;
-    private final EmpleadoDAO empleadoDAO;
-    private final MascotaDAO mascotaDAO;
-    private final AdopcionDAO adopcionDAO;
+    @Autowired
+    private EmpleadoDAO empleadoDAO;
+
+    @Autowired
+    private ConfigurableApplicationContext context;
 
     private JTextField nombreField;
     private JTextField edadField;
@@ -22,15 +24,14 @@ public class RegistroUI extends JFrame {
     private JTextField fechaNacimientoField;
     private JPasswordField passwordField;
 
-    public RegistroUI(AdoptanteDAO adoptanteDAO, EmpleadoDAO empleadoDAO, MascotaDAO mascotaDAO, AdopcionDAO adopcionDAO) {
-        this.adoptanteDAO = adoptanteDAO;
-        this.empleadoDAO = empleadoDAO;
-        this.mascotaDAO = mascotaDAO;
-        this.adopcionDAO = adopcionDAO;
-
+    public RegistroUI() {
         setTitle("Ingreso de Empleado");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
+        setLocationRelativeTo(null);
+    }
+
+    public void initUI() {
         setLayout(new GridLayout(6, 2, 10, 10));
         ((JPanel)getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -62,8 +63,6 @@ public class RegistroUI extends JFrame {
 
         guardarBtn.addActionListener(e -> guardarEmpleado());
         cancelarBtn.addActionListener(e -> volverALogin());
-
-        setLocationRelativeTo(null);
     }
 
     private void guardarEmpleado() {
@@ -94,6 +93,8 @@ public class RegistroUI extends JFrame {
 
     private void volverALogin() {
         dispose();
-        new LoginUI(adoptanteDAO, empleadoDAO, mascotaDAO, adopcionDAO).setVisible(true);
+        LoginUI loginUI = context.getBean(LoginUI.class);
+        loginUI.initUI();
+        loginUI.setVisible(true);
     }
 }

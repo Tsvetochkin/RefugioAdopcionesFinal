@@ -83,4 +83,20 @@ public abstract class Adopcion<T extends Mascota> {
     public LocalDate getFecha() {
         return fecha;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+
+    public void setAdoptante(Adoptante adoptante) {
+        this.adoptante = adoptante;
+    }
+
+    public void setMascota(T mascota) {
+        this.mascota = mascota;
+    }
 }

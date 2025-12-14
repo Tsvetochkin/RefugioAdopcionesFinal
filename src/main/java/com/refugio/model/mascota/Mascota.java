@@ -5,6 +5,7 @@ import com.refugio.model.mascota.estado.EstadoMascota;
 import com.refugio.model.persona.Adoptante;
 import com.refugio.model.persona.Empleado;
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -70,5 +71,22 @@ public abstract class Mascota {
     @Override
     public String toString() {
         return nombre;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mascota mascota = (Mascota) o;
+        return id != null && id.equals(mascota.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

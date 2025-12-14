@@ -1,24 +1,38 @@
 package com.refugio.servicio;
 
+import com.refugio.dao.AdopcionDAO;
 import com.refugio.model.adopcion.Adopcion;
-import com.refugio.model.mascota.Mascota;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class ServicioAdopciones {
 
-    private List<Adopcion<? extends Mascota>> adopciones = new ArrayList<>();
+    @Autowired
+    private AdopcionDAO adopcionDAO;
 
-    public void registrar(Adopcion<? extends Mascota> adopcion) {
-        adopciones.add(adopcion);
+    public void registrarAdopcion(Adopcion adopcion) {
+        adopcionDAO.save(adopcion);
     }
 
-    public List<Adopcion<? extends Mascota>> obtenerTodas() {
-        return adopciones;
+    public List<Adopcion> obtenerTodasLasAdopciones() {
+        return adopcionDAO.findAll();
     }
 
-    public boolean existeAdopcionSinMascota() {
-        return adopciones.stream().anyMatch(a -> a.getMascota() == null);
+    public Optional<Adopcion> obtenerAdopcionPorId(Long id) {
+        return adopcionDAO.findById(id);
+    }
+
+    public void actualizarAdopcion(Adopcion adopcion) {
+        // The save method handles both creation and update.
+        // If the Adopcion object has an ID, it will be updated.
+        adopcionDAO.save(adopcion);
+    }
+
+    public void eliminarAdopcion(Long id) {
+        adopcionDAO.deleteById(id);
     }
 }

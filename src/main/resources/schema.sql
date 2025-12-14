@@ -1,9 +1,4 @@
-DROP TABLE IF EXISTS empleado;
-DROP TABLE IF EXISTS adoptante;
-DROP TABLE IF EXISTS mascota;
-DROP TABLE IF EXISTS adopcion;
-
-CREATE TABLE empleado (
+CREATE TABLE IF NOT EXISTS empleado (
                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
                           nombre VARCHAR(255),
                           edad INT,
@@ -12,7 +7,7 @@ CREATE TABLE empleado (
                           password VARCHAR(255)
 );
 
-CREATE TABLE adoptante (
+CREATE TABLE IF NOT EXISTS adoptante (
                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
                            nombre VARCHAR(255),
                            edad INT,
@@ -20,7 +15,7 @@ CREATE TABLE adoptante (
                            fecha_nacimiento VARCHAR(255)
 );
 
-CREATE TABLE mascota (
+CREATE TABLE IF NOT EXISTS mascota (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     tipo_mascota VARCHAR(31) NOT NULL,
     nombre VARCHAR(255),
@@ -29,7 +24,7 @@ CREATE TABLE mascota (
     recomendaciones_cuidado VARCHAR(255)
 );
 
-CREATE TABLE adopcion (
+CREATE TABLE IF NOT EXISTS adopcion (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     tipo_adopcion VARCHAR(31) NOT NULL,
     empleado_id BIGINT,
