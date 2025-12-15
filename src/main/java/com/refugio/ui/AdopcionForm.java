@@ -1,8 +1,8 @@
 package com.refugio.ui;
 
-import com.refugio.dao.AdoptanteDAO;
-import com.refugio.dao.EmpleadoDAO;
-import com.refugio.dao.MascotaDAO;
+import com.refugio.controller.AdoptanteController;
+import com.refugio.controller.EmpleadoController;
+import com.refugio.controller.MascotaController;
 import com.refugio.model.adopcion.Adopcion;
 import com.refugio.model.adopcion.AdopcionFactory;
 import com.refugio.model.persona.Adoptante;
@@ -24,11 +24,11 @@ public class AdopcionForm extends JFrame {
     @Autowired
     private ServicioAdopciones servicioAdopciones;
     @Autowired
-    private AdoptanteDAO adoptanteDAO;
+    private AdoptanteController adoptanteController;
     @Autowired
-    private EmpleadoDAO empleadoDAO;
+    private EmpleadoController empleadoController;
     @Autowired
-    private MascotaDAO mascotaDAO;
+    private MascotaController mascotaController;
 
     private JComboBox<Adoptante> comboAdoptante;
     private JComboBox<Empleado> comboEmpleado;
@@ -121,11 +121,11 @@ public class AdopcionForm extends JFrame {
         comboEmpleado.removeAllItems();
         comboMascota.removeAllItems();
 
-        adoptanteDAO.findAll().forEach(comboAdoptante::addItem);
-        empleadoDAO.findAll().forEach(comboEmpleado::addItem);
+        adoptanteController.obtenerTodos().forEach(comboAdoptante::addItem);
+        empleadoController.getEmpleados().forEach(comboEmpleado::addItem);
         
         // Logic to show only available pets in the dropdown
-        List<Mascota> todasLasMascotas = mascotaDAO.findAll();
+        List<Mascota> todasLasMascotas = mascotaController.obtenerTodas();
         List<Adopcion> adopcionesActuales = servicioAdopciones.obtenerTodasLasAdopciones();
         List<Mascota> mascotasAdoptadas = adopcionesActuales.stream().map(Adopcion::getMascota).toList();
 

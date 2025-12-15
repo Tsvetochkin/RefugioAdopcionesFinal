@@ -1,6 +1,6 @@
 package com.refugio.ui;
 
-import com.refugio.dao.EmpleadoDAO;
+import com.refugio.controller.EmpleadoController;
 import com.refugio.model.persona.Empleado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class LoginUI extends JFrame {
 
     @Autowired
-    private EmpleadoDAO empleadoDAO;
+    private EmpleadoController empleadoController;
 
     @Autowired
     private ConfigurableApplicationContext context;
@@ -56,7 +56,7 @@ public class LoginUI extends JFrame {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        Optional<Empleado> empleadoOptional = empleadoDAO.findByNombreAndPassword(username, password);
+        Optional<Empleado> empleadoOptional = empleadoController.login(username, password);
 
         if (empleadoOptional.isPresent()) {
             JOptionPane.showMessageDialog(this, "Login successful!");

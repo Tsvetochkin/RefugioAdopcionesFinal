@@ -69,41 +69,62 @@ classDiagram
         + JpaRepository~Adoptante, Long~
     }
 
+    class EmpleadoController {
+        <<Controller>>
+        - EmpleadoDAO empleadoDAO
+        + registrarEmpleado(Empleado)
+        + login(String, String)
+        + getEmpleados()
+    }
+    EmpleadoController ..> EmpleadoDAO : "usa"
+
+    class MascotaController {
+        <<Controller>>
+        - MascotaDAO mascotaDAO
+        + obtenerTodas()
+    }
+    MascotaController ..> MascotaDAO : "usa"
+
+    class AdoptanteController {
+        <<Controller>>
+        - AdoptanteDAO adoptanteDAO
+        + obtenerTodos()
+    }
+    AdoptanteController ..> AdoptanteDAO : "usa"
+
     class ServicioAdopciones {
         <<Service>>
         - AdopcionDAO adopcionDAO
         + registrarAdopcion(Adopcion)
         + obtenerTodasLasAdopciones()
-        + actualizarAdopcion(Adopcion)
-        + eliminarAdopcion(Long)
     }
     ServicioAdopciones ..> AdopcionDAO : "usa"
 
     class AdopcionForm {
         <<Component>>
         - ServicioAdopciones servicioAdopciones
-        - AdoptanteDAO adoptanteDAO
-        - EmpleadoDAO empleadoDAO
-        - MascotaDAO mascotaDAO
+        - AdoptanteController adoptanteController
+        - EmpleadoController empleadoController
+        - MascotaController mascotaController
     }
     AdopcionForm ..> ServicioAdopciones : "usa"
-    AdopcionForm ..> AdoptanteDAO : "usa"
-    AdopcionForm ..> EmpleadoDAO : "usa"
-    AdopcionForm ..> MascotaDAO : "usa"
+    AdopcionForm ..> AdoptanteController : "usa"
+    AdopcionForm ..> EmpleadoController : "usa"
+    AdopcionForm ..> MascotaController : "usa"
 
     class LoginUI {
         <<Component>>
-        - EmpleadoDAO empleadoDAO
+        - EmpleadoController empleadoController
         - ApplicationContext context
     }
-    LoginUI ..> EmpleadoDAO : "usa"
+    LoginUI ..> EmpleadoController : "usa"
     LoginUI ..> AdopcionForm : "crea"
 
     class RegistroUI {
         <<Component>>
-        - EmpleadoDAO empleadoDAO
+        - EmpleadoController empleadoController
     }
-    RegistroUI ..> EmpleadoDAO : "usa"
+    RegistroUI ..> EmpleadoController : "usa"
     LoginUI ..> RegistroUI : "crea"
 
     class RefugioApplication {

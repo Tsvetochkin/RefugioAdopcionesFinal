@@ -1,6 +1,6 @@
 package com.refugio.ui;
 
-import com.refugio.dao.EmpleadoDAO;
+import com.refugio.controller.EmpleadoController;
 import com.refugio.model.persona.Empleado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -13,7 +13,7 @@ import java.awt.*;
 public class RegistroUI extends JFrame {
 
     @Autowired
-    private EmpleadoDAO empleadoDAO;
+    private EmpleadoController empleadoController;
 
     @Autowired
     private ConfigurableApplicationContext context;
@@ -79,7 +79,7 @@ public class RegistroUI extends JFrame {
             String fechaNacimiento = fechaNacimientoField.getText();
 
             Empleado nuevoEmpleado = new Empleado(nombre, edad, direccion, fechaNacimiento, password);
-            empleadoDAO.save(nuevoEmpleado);
+            empleadoController.registrarEmpleado(nuevoEmpleado);
 
             JOptionPane.showMessageDialog(this, "Empleado '" + nombre + "' guardado exitosamente.");
             volverALogin();
