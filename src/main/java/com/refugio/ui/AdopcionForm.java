@@ -4,7 +4,6 @@ import com.refugio.controller.AdoptanteController;
 import com.refugio.controller.EmpleadoController;
 import com.refugio.controller.MascotaController;
 import com.refugio.model.adopcion.Adopcion;
-import com.refugio.model.adopcion.AdopcionFactory;
 import com.refugio.model.persona.Adoptante;
 import com.refugio.model.persona.Empleado;
 import com.refugio.model.mascota.Mascota;
@@ -180,7 +179,7 @@ public class AdopcionForm extends JFrame {
                 return;
             }
 
-            Adopcion<?> adopcion = AdopcionFactory.crearAdopcion(mascota, adoptante, empleado);
+            Adopcion<?> adopcion = mascota.crearAdopcion(empleado, adoptante);
             servicioAdopciones.registrarAdopcion(adopcion);
 
             JOptionPane.showMessageDialog(this, "Adopción registrada exitosamente.");
